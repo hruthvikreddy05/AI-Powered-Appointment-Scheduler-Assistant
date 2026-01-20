@@ -27,8 +27,65 @@ Final Appointment JSON Response
 - Timezone-aware normalization (Asia/Kolkata)
 
 ## Setup Instructions
-
-### 1. Clone the repository
+ 1. Clone the repository
 ```bash
-git clone https://github.com/<your-username>/ai-appointment-scheduler-api.git
+git clone https://github.com/<hruthvikreddy05>/ai-appointment-scheduler-api.git
 cd ai-appointment-scheduler-api
+
+2. Install dependencies
+pip install -r requirements.txt
+
+3. Run the server
+uvicorn main:app --reload
+
+4. Open Swagger UI
+http://127.0.0.1:8000/docs
+
+API Usage
+Endpoint
+POST /parse-appointment
+
+Request Body
+{
+  "text": "Book dentist next Friday at 3pm"
+}
+
+Successful Response
+{
+  "appointment": {
+    "department": "Dentistry",
+    "date": "2025-09-26",
+    "time": "15:00",
+    "tz": "Asia/Kolkata"
+  },
+  "status": "ok"
+}
+
+Ambiguous Input Response
+{
+  "status": "needs_clarification",
+  "message": "Ambiguous date/time or department"
+}
+
+Sample curl Requests
+Valid Request
+curl -X POST http://127.0.0.1:8000/parse-appointment \
+-H "Content-Type: application/json" \
+-d '{"text":"Book dentist next Friday at 3pm"}'
+
+Ambiguous Request
+curl -X POST http://127.0.0.1:8000/parse-appointment \
+-H "Content-Type: application/json" \
+-d '{"text":"Book dentist next week"}'
+
+POSTMAN 
+
+Method: POST
+
+URL: http://127.0.0.1:8000/parse-appointment
+
+Body → raw → JSON
+
+{
+  "text": "Book dentist next Friday at 3pm"
+}
